@@ -14,6 +14,7 @@ public class UsuarioDAO implements UsuarioREP {
     private static final String SQL_INSERT_USER =
             "INSERT INTO usuarios (username, usermail, userpass, userrol, useravatar, usertoken, userfchcre) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+    @Override
     public int saveUser (Usuario user) throws SQLException {
 
         Usuario userDB = null;
@@ -45,6 +46,31 @@ public class UsuarioDAO implements UsuarioREP {
             if (ps != null) ps.close();
         }
         return userid;
+    }
+
+    @Override
+    public Usuario findUserByEmail(String email) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Usuario findUserById(int userid) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean updateUser(Usuario user) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public String updateUserToken(int userid, String usertoken) throws SQLException {
+        return "";
+    }
+
+    @Override
+    public boolean existUserWithEmail(String email) throws SQLException {
+        return false;
     }
 
 }
