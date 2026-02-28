@@ -1,13 +1,15 @@
 package ec.cuernonegro.backend.api.models.repository;
 import ec.cuernonegro.backend.api.configurations.ConexionDB;
 import ec.cuernonegro.backend.api.models.entity.Usuario;
+import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+@Repository
 public class UsuarioDAO implements UsuarioREP {
     // Implementation of the methods of the user interface
 
@@ -48,14 +50,74 @@ public class UsuarioDAO implements UsuarioREP {
         return userid;
     }
 
+    private static final String SQL_SELECT_USER_BY_EMAIL =
+            "SELECT * FROM usuarios WHERE usermail = ?";
+
     @Override
     public Usuario findUserByEmail(String email) throws SQLException {
-        return null;
+
+        Usuario userDB = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try(Connection conn = ConexionDB.getConnection()) {
+
+            ps = conn.prepareStatement(SQL_SELECT_USER_BY_EMAIL);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                userDB = new Usuario();
+                userDB.setUserid(rs.getInt("userid"));
+                userDB.setUsername(rs.getString("username"));
+                userDB.setUsermail(rs.getString("usermail"));
+                userDB.setUserpass(rs.getString("userpass"));
+                userDB.setUserrol(rs.getString("userrol"));
+                userDB.setUseravatar(rs.getString("useravatar"));
+                userDB.setUsertoken(rs.getString("usertoken"));
+                userDB.setUserfchcre(rs.getTimestamp("userfchcre").toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar el usuario por email en la base de datos", e);
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return userDB;
     }
+
+    private static final String SQL_SELECT_USER_BY_ID =
+            "SELECT * FROM usuarios WHERE userid = ?";
 
     @Override
     public Usuario findUserById(int userid) throws SQLException {
-        return null;
+        Usuario userDB = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try(Connection conn = ConexionDB.getConnection()){
+
+            ps = conn.prepareStatement(SQL_SELECT_USER_BY_ID);
+            ps.setInt(1, userid);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                userDB = new Usuario();
+                userDB.setUserid(rs.getInt("userid"));
+                userDB.setUsername(rs.getString("username"));
+                userDB.setUsermail(rs.getString("usermail"));
+                userDB.setUserpass(rs.getString("userpass"));
+                userDB.setUserrol(rs.getString("userrol"));
+                userDB.setUseravatar(rs.getString("useravatar"));
+                userDB.setUsertoken(rs.getString("usertoken"));
+                userDB.setUserfchcre(rs.getTimestamp("userfchcre").toLocalDateTime());
+            }
+        } catch (Exception e){
+            throw new RuntimeException("Error al buscar el usuario por ID en la base de datos", e);
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return userDB;
     }
 
     @Override
