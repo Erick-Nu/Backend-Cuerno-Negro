@@ -9,9 +9,9 @@ public interface UsuarioREP {
     int saveUser (Usuario user) throws SQLException;
     Usuario findUserByEmail(String email) throws SQLException;
     Usuario findUserById (int userid) throws SQLException;
+    boolean exitsUserWithEmail (String email) throws SQLException;
 
     boolean updateUser (Usuario user) throws SQLException;
     String updateUserToken (int userid, String usertoken) throws SQLException;
-    boolean existUserWithEmail (String email) throws SQLException;
 
 }

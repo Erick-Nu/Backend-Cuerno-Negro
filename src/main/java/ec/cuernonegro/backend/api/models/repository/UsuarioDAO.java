@@ -120,6 +120,34 @@ public class UsuarioDAO implements UsuarioREP {
         return userDB;
     }
 
+    public static final String SQL_EXISTS_USER_BY_EMAIL =
+            "SELECT 1 FROM usuarios WHERE usermail = ? LIMITE 1";
+
+    @Override
+    public boolean exitsUserWithEmail(String email) throws SQLException {
+        boolean existsEMailDB = false;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try (Connection conn = ConexionDB.getConnection()) {
+
+            ps = conn.prepareStatement(SQL_EXISTS_USER_BY_EMAIL);
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                existsEMailDB = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al verificar la existencia del email en la base de datos", e);
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+        }
+        return existsEMailDB;
+    }
+
+
     @Override
     public boolean updateUser(Usuario user) throws SQLException {
         return false;
@@ -128,11 +156,6 @@ public class UsuarioDAO implements UsuarioREP {
     @Override
     public String updateUserToken(int userid, String usertoken) throws SQLException {
         return "";
-    }
-
-    @Override
-    public boolean existUserWithEmail(String email) throws SQLException {
-        return false;
     }
 
 }

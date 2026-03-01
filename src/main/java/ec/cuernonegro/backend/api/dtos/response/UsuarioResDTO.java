@@ -4,7 +4,7 @@ public class UsuarioResDTO {
 
     private int id;
     private String name;
-    private String last;
+    private String phone;
     private String email;
     private String img;
 
@@ -16,8 +16,8 @@ public class UsuarioResDTO {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getLast() { return last; }
-    public void setLast(String last) { this.last = last; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
